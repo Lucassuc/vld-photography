@@ -345,7 +345,7 @@
         placeholder="Camera settings (optional), e.g. 35mm · f/2.8 · 1/250 · ISO 200" value="${esc(v.settings || "")}">`;
 
       $("#room-reflection").outerHTML = `<textarea class="inline-reflection" id="edit-reflection" rows="12" aria-label="Reflection"
-        placeholder="Write your reflection: what you set out to do, what happened, what was difficult, what you changed, and what's next.">${esc(
+        placeholder="Write your reflection: what you set out to do, what happened, how focused you stayed, what was difficult, what you changed, and what's next.">${esc(
           v.reflection || ""
         )}</textarea>`;
     }

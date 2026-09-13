@@ -679,3 +679,13 @@
   justify-items: center;
   max-width: 34rem;
 }
+
+/* Section number for the pinned plan scene */
+.scene__eyebrow {
+  position: absolute;
+  top: calc(var(--header-h) + var(--s-8));
+  left: var(--gutter);
+  right: var(--gutter);
+  margin: 0;
+  z-index: 1;
+}

@@ -388,13 +388,20 @@
     if (!header) return;
     let last = window.scrollY;
 
-    ticker.add((y) => {
+    // Runs on real scroll events as well as the frame loop: animation frames
+    // can be paused (background tabs, some mobile browsers), scroll events are not.
+    function update() {
+      const y = window.scrollY;
       header.classList.toggle("is-stuck", y > 40);
       const menuOpen = document.body.classList.contains("is-locked");
       if (!menuOpen && y > 400 && y > last + 4) header.classList.add("is-hidden");
       else if (y < last - 4 || y <= 400) header.classList.remove("is-hidden");
       last = y;
-    });
+    }
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    ticker.add(update);
   }
 
   /* ======================================================================
@@ -627,12 +634,12 @@
     const dismiss = () => {
       pre.hidden = true;
       blades.forEach((b) => (b.hidden = true));
-      root.classList.remove("intro");
+      root.classList.remove("vld-intro");
     };
 
     // The <head> script only adds .intro on a first, visible, motion-allowed
     // visit. Anything else goes straight to the page.
-    if (!root.classList.contains("intro")) {
+    if (!root.classList.contains("vld-intro")) {
       dismiss();
       return;
     }

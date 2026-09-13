@@ -49,7 +49,7 @@
           var seen = sessionStorage.getItem("vld-intro") === "1";
           var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           var visible = document.visibilityState === "visible";
-          if (root.dataset.intro === "on" && !seen && !still && visible) root.classList.add("intro");
+          if (root.dataset.intro === "on" && !seen && !still && visible) root.classList.add("vld-intro");
         } catch (e) {}
       })();
     </script>
@@ -284,40 +284,29 @@
       </section>
 
       <!-- ===================== 03 · The arc (pinned) ===================== -->
-      <section class="scene" id="arc" data-chapter="How it's graded" data-scene>
+      <section class="scene" id="arc" data-chapter="The plan" data-scene>
         <div class="scene__pin">
+          <div class="eyebrow scene__eyebrow"><span class="label label--accent">03</span><span class="label">The plan</span></div>
           <div class="scene__bg" aria-hidden="true"></div>
           <span class="scene__num" data-from="1" data-to="16" aria-hidden="true">01</span>
 
           <div class="scene__content">
             <div class="scene__slide" data-slide>
-              <div class="scene__kicker">
-                <span class="label label--accent">The rule</span>
-              </div>
-              <p class="scene__line">Pace is not the measure.</p>
-              <p class="lead" style="max-width: 38ch">
-                A week stuck on one hard technique counts for more than an easy one.
-              </p>
+              <div class="scene__kicker"><span class="label label--accent">Weeks 02–06</span></div>
+              <p class="scene__line">Camera and composition.</p>
+              <p class="lead" style="max-width: 40ch">Memorize Your Camera · Simplify · Watch the Edges · Put It Into Perspective · Think About Your Scene Abstractly</p>
             </div>
 
             <div class="scene__slide" data-slide>
-              <div class="scene__kicker">
-                <span class="label label--accent">The consequence</span>
-              </div>
-              <p class="scene__line">Difficulty is not penalised.</p>
-              <p class="lead" style="max-width: 38ch">
-                So each reflection says what went wrong and what I changed.
-              </p>
+              <div class="scene__kicker"><span class="label label--accent">Weeks 07–11</span></div>
+              <p class="scene__line">Light, place and timing.</p>
+              <p class="lead" style="max-width: 40ch">Find Good Light · Scout · Don't Avoid Bad Weather · Capture Your Subject Doing Something · Wait for Patterns</p>
             </div>
 
             <div class="scene__slide" data-slide>
-              <div class="scene__kicker">
-                <span class="label label--accent">The point</span>
-              </div>
-              <p class="scene__line">The record is the work.</p>
-              <p class="lead" style="max-width: 38ch">
-                Every session is written up during the term, not at the end.
-              </p>
+              <div class="scene__kicker"><span class="label label--accent">Weeks 12–16</span></div>
+              <p class="scene__line">Meaning and review.</p>
+              <p class="lead" style="max-width: 40ch">Interconnectedness and Visual Puns · Focus On Emotion · Refine Your Photos in the Field · Don't Follow the Rules · Be Selective</p>
             </div>
           </div>
         </div>

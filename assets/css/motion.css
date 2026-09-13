@@ -595,12 +595,12 @@ body.cursor-link .cursor {
   display: none;
 }
 
-html.intro .preloader {
+html.vld-intro .preloader {
   display: grid;
   animation: preloader-failsafe 0.4s var(--ease-deso) 4s forwards;
 }
 
-html.intro .preloader__blade {
+html.vld-intro .preloader__blade {
   display: block;
   animation: preloader-failsafe 0.4s var(--ease-deso) 4s forwards;
 }
