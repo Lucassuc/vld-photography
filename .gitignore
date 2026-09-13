@@ -1,0 +1,8 @@
+# Full-size originals stay on the Mac — keeps the repository small and fast
+images/_originals/
+
+# Local dev server config (harmless to keep, but not part of the site)
+.claude/
+
+.DS_Store
+Thumbs.db

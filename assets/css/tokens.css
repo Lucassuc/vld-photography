@@ -1,0 +1,144 @@
+/* ==========================================================================
+   VLD Photography — Design Tokens
+   Palette echoes Kodak Portra 400: warm creams, muted orange, warm neutrals.
+   Two grounds: "darkroom" (cinematic, photo-forward) and "print" (cream,
+   built for long-form reading — the journal's reflections live here).
+   ========================================================================== */
+
+:root {
+  /* ---------- Darkroom ground (home, gallery, plan) ---------- */
+  --dk-900: #0b0907; /* film base — deepest */
+  --dk-850: #100d0b;
+  --dk-800: #16120f;
+  --dk-700: #1e1916;
+  --dk-600: #2a231e;
+  --dk-500: #3a302a;
+
+  /* ---------- Print ground (journal, about) ---------- */
+  --cr-50: #f8f3ea; /* paper white, warm */
+  --cr-100: #f2ebde;
+  --cr-200: #e9dfcd;
+  --cr-300: #ddd0ba;
+  --cr-400: #c9b89e;
+
+  /* ---------- Ink ---------- */
+  --ink-900: #241c15; /* warm near-black, print text */
+  --ink-700: #4a3c30;
+  --ink-500: #6e6055; /* 5.4:1 on --cr-50 */
+
+  /* ---------- Light on dark ---------- */
+  --lt-100: #f2e9db; /* 16:1 on --dk-900 */
+  --lt-300: #d6c8b4;
+  --lt-500: #9a8b79; /* 6.0:1 on --dk-900 */
+  --lt-700: #6b5f52;
+
+  /* ---------- Portra accents ---------- */
+  --amber: #c8703c; /* 5.5:1 on --dk-900 — decorative + dark-ground text */
+  --amber-lo: #a0521f; /* 5.0:1 on --cr-50 — print-ground accent text */
+  --amber-hi: #e8b27d; /* highlight, hairlines, glows */
+  --sage: #7c8471; /* the cool note in Portra's shadows */
+
+  /* ---------- Semantic ---------- */
+  --bg: var(--dk-900);
+  --bg-raised: var(--dk-800);
+  --fg: var(--lt-100);
+  --fg-muted: var(--lt-500);
+  --accent: var(--amber);
+  --rule: rgb(242 233 219 / 0.14);
+  --rule-strong: rgb(242 233 219 / 0.28);
+  --selection: rgb(200 112 60 / 0.35);
+
+  /* ---------- Type ---------- */
+  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-read: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-ui: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Fluid display scale — clamp(min, preferred, max) */
+  --t-hero: clamp(3.25rem, 11.5vw, 13rem);
+  --t-d1: clamp(2.75rem, 7.5vw, 7rem);
+  --t-d2: clamp(2.125rem, 5vw, 4.25rem);
+  --t-d3: clamp(1.625rem, 3.2vw, 2.75rem);
+  --t-lead: clamp(1.125rem, 1.9vw, 1.6rem);
+  --t-body: clamp(1rem, 1.05vw, 1.1875rem);
+  --t-read: clamp(1.0625rem, 1.15vw, 1.25rem); /* reflection prose */
+  --t-small: 0.875rem;
+  --t-micro: 0.6875rem;
+
+  --lh-tight: 0.94;
+  --lh-display: 1.04;
+  --lh-body: 1.6;
+  --lh-read: 1.75; /* generous — the rubric asks for comfortable long reading */
+
+  --tr-micro: 0.16em; /* mono label tracking */
+  --tr-display: -0.02em;
+
+  /* ---------- Spacing — spacious scale, 8px base ---------- */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-6: 1.5rem;
+  --s-8: 2rem;
+  --s-12: 3rem;
+  --s-16: 4rem;
+  --s-24: 6rem;
+  --s-32: 8rem;
+  --s-48: 12rem;
+  --section: clamp(5rem, 12vw, 11rem);
+
+  /* ---------- Layout ---------- */
+  --gutter: clamp(1.25rem, 4.5vw, 4.5rem);
+  --max-w: 90rem;
+  --measure: 34rem; /* ~68ch — reflection line length */
+
+  /* ---------- Motion — deso's signature curve + the standard family ---------- */
+  --ease-deso: cubic-bezier(0.42, 0, 0.33, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --d-fast: 0.2s;
+  --d-base: 0.5s;
+  --d-slow: 0.9s;
+  --d-reveal: 1.2s;
+  --d-cinema: 1.5s;
+
+  --stagger: 0.055s;
+
+  /* ---------- Elevation & form ---------- */
+  --radius: 2px; /* near-square — prints, not cards */
+  --radius-pill: 999px;
+  --shadow-print: 0 1px 2px rgb(36 28 21 / 0.06), 0 12px 40px rgb(36 28 21 / 0.1);
+  --shadow-lift: 0 30px 80px rgb(0 0 0 / 0.5);
+
+  --header-h: 4.5rem;
+  color-scheme: dark;
+}
+
+/* ---------- Print ground — applied per page via <body data-ground="print"> --- */
+[data-ground="print"] {
+  --bg: var(--cr-50);
+  --bg-raised: var(--cr-100);
+  --fg: var(--ink-900);
+  --fg-muted: var(--ink-500);
+  --accent: var(--amber-lo);
+  /* The dark-ground sage is too light to clear 4.5:1 on paper. */
+  --sage: #646c59;
+  --rule: rgb(36 28 21 / 0.14);
+  --rule-strong: rgb(36 28 21 / 0.3);
+  color-scheme: light;
+}
+
+/* Sections that invert inside a page (e.g. a dark band on a cream page). */
+[data-ground="dark"] {
+  --bg: var(--dk-900);
+  --bg-raised: var(--dk-800);
+  --fg: var(--lt-100);
+  --fg-muted: var(--lt-500);
+  --accent: var(--amber);
+  --rule: rgb(242 233 219 / 0.14);
+  --rule-strong: rgb(242 233 219 / 0.28);
+  color-scheme: dark;
+}

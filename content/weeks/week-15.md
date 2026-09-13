@@ -1,0 +1,7 @@
+---
+week: 15
+date: 2026-12-08
+concept:
+settings:
+image:
+---

@@ -1,0 +1,681 @@
+/* ==========================================================================
+   Page-level layouts
+   ========================================================================== */
+
+/* ==========================================================================
+   Hero — full-bleed photo, oversized display type, scroll cue
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: end;
+  padding-top: calc(var(--header-h) + var(--s-8));
+  padding-bottom: var(--s-8);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.hero__media img {
+  width: 100%;
+  height: 118%;
+  object-fit: cover;
+  filter: saturate(0.86) contrast(1.04) brightness(0.74);
+}
+
+/* Warm scrim so the display type always clears 4.5:1 over any photo */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+      180deg,
+      rgb(11 9 7 / 0.72) 0%,
+      rgb(11 9 7 / 0.34) 32%,
+      rgb(11 9 7 / 0.62) 72%,
+      rgb(11 9 7 / 0.94) 100%
+    ),
+    linear-gradient(92deg, rgb(11 9 7 / 0.62), transparent 62%);
+}
+
+.hero__aura {
+  width: 42vw;
+  height: 42vw;
+  background: radial-gradient(circle, rgb(200 112 60 / 0.5), transparent 68%);
+  top: 8%;
+  right: -6%;
+  z-index: -1;
+}
+
+.hero__body {
+  display: grid;
+  gap: var(--s-6);
+  align-content: end;
+}
+
+.hero__eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.hero__title {
+  max-width: 11ch;
+}
+
+.hero__title em {
+  font-style: italic;
+  color: var(--amber-hi);
+}
+
+.hero__lead {
+  max-width: 46ch;
+  color: var(--lt-300);
+}
+
+.hero__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-8);
+  margin-top: var(--s-12);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--rule);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+
+.scroll-cue {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-3);
+}
+
+@media (max-width: 700px) {
+  .scroll-cue {
+    display: none;
+  }
+}
+
+/* Empty-state hero when no photo has been added yet */
+.hero--noimg .hero__media {
+  background: radial-gradient(
+      120% 90% at 70% 10%,
+      rgb(200 112 60 / 0.22),
+      transparent 60%
+    ),
+    linear-gradient(180deg, var(--dk-800), var(--dk-900));
+}
+
+/* ==========================================================================
+   Intro band — statement + current focus
+   ========================================================================== */
+
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(var(--s-8), 6vw, var(--s-24));
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .intro {
+    grid-template-columns: 1fr;
+  }
+}
+
+.intro__statement {
+  font-family: var(--font-display);
+  font-size: var(--t-d3);
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  text-wrap: pretty;
+}
+
+.intro__statement .dim {
+  color: var(--fg-muted);
+}
+
+.focus-card {
+  display: grid;
+  gap: var(--s-4);
+  padding: var(--s-6);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--bg-raised) 70%, transparent);
+}
+
+.focus-card__week {
+  font-family: var(--font-display);
+  font-size: var(--t-d3);
+  line-height: 1;
+}
+
+/* ==========================================================================
+   Latest entry — the big featured card
+   ========================================================================== */
+
+.latest {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(var(--s-6), 4vw, var(--s-16));
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .latest {
+    grid-template-columns: 1fr;
+  }
+}
+
+.latest__frame {
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius);
+}
+
+.latest__body {
+  display: grid;
+  gap: var(--s-5, 1.25rem);
+  align-content: center;
+}
+
+.latest__title {
+  font-family: var(--font-display);
+  font-size: var(--t-d2);
+  line-height: 1.06;
+  letter-spacing: var(--tr-display);
+  text-wrap: balance;
+}
+
+/* ==========================================================================
+   Pinned scene — the 16-week arc. Sticky viewport, scroll drives the stack.
+   ========================================================================== */
+
+.scene {
+  position: relative;
+  height: 320vh; /* scroll distance that drives the pinned frame */
+}
+
+.scene__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.scene__bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    100% 80% at 50% 120%,
+    rgb(200 112 60 / 0.2),
+    transparent 70%
+  );
+}
+
+/* Giant week number that counts through the term as you scroll */
+.scene__num {
+  font-family: var(--font-display);
+  font-size: clamp(9rem, 42vw, 34rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: var(--fg);
+  opacity: 0.09;
+  font-variant-numeric: tabular-nums;
+  position: absolute;
+  user-select: none;
+  pointer-events: none;
+}
+
+.scene__content {
+  position: relative;
+  display: grid;
+  gap: var(--s-6);
+  justify-items: center;
+  text-align: center;
+  padding-inline: var(--gutter);
+  max-width: 48rem;
+}
+
+.scene__kicker {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.scene__line {
+  font-family: var(--font-display);
+  font-size: var(--t-d2);
+  line-height: 1.1;
+  letter-spacing: var(--tr-display);
+  text-wrap: balance;
+}
+
+/* The three statements cross-fade as scroll progresses */
+.scene__slide {
+  grid-area: 1 / 1;
+  display: grid;
+  gap: var(--s-6);
+  justify-items: center;
+  opacity: 0;
+  transform: translate3d(0, 2rem, 0) scale(0.97);
+  transition: opacity 0.7s var(--ease-deso), transform 0.7s var(--ease-deso);
+  pointer-events: none;
+}
+
+.scene__slide.is-active {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   Horizontal contact strip — pins vertically, scrolls sideways
+   ========================================================================== */
+
+.strip {
+  position: relative;
+  height: 260vh;
+}
+
+.strip__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  /* Without an explicit column the grid sizes to the track's full scroll
+     width and pushes the heading off-screen. */
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  gap: var(--s-8);
+  overflow: hidden;
+}
+
+.strip__head {
+  padding-inline: var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-4);
+}
+
+.strip__track {
+  display: flex;
+  gap: var(--s-6);
+  padding-inline: var(--gutter);
+  will-change: transform;
+  transform: translate3d(var(--x, 0px), 0, 0);
+}
+
+.strip__item {
+  flex: none;
+  width: clamp(14rem, 26vw, 24rem);
+  display: grid;
+  gap: var(--s-3);
+}
+
+.strip__item .frame {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius);
+}
+
+/* On narrow screens the pin is replaced by an honest native swipe */
+@media (max-width: 800px), (prefers-reduced-motion: reduce) {
+  .strip {
+    height: auto;
+  }
+  .strip__pin {
+    position: static;
+    height: auto;
+    padding-block: var(--section);
+  }
+  .strip__track {
+    transform: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: var(--s-4);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .strip__item {
+    scroll-snap-align: start;
+    width: min(72vw, 20rem);
+  }
+}
+
+/* ==========================================================================
+   Page header — the non-home pages
+   ========================================================================== */
+
+.page-head {
+  padding-top: calc(var(--header-h) + clamp(3.5rem, 10vw, 8rem));
+  padding-bottom: clamp(2.5rem, 6vw, 5rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-head__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  gap: clamp(var(--s-6), 5vw, var(--s-16));
+  align-items: end;
+}
+
+@media (max-width: 900px) {
+  .page-head__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.page-head__title {
+  font-family: var(--font-display);
+  font-size: var(--t-d1);
+  line-height: 0.98;
+  letter-spacing: var(--tr-display);
+  text-wrap: balance;
+}
+
+.page-head__lead {
+  color: var(--fg-muted);
+  max-width: 48ch;
+}
+
+.page-head__aura {
+  width: 34vw;
+  height: 34vw;
+  background: radial-gradient(circle, rgb(200 112 60 / 0.16), transparent 70%);
+  top: -14%;
+  right: -8%;
+  z-index: -1;
+}
+
+/* ==========================================================================
+   Journal page layout — sticky week rail beside the entries
+   ========================================================================== */
+
+.journal {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: clamp(var(--s-8), 5vw, var(--s-16));
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .journal {
+    grid-template-columns: 1fr;
+  }
+  .weekrail {
+    position: static;
+  }
+  .weekrail__grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+.journal__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding-bottom: var(--s-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+  gap: 2px;
+}
+
+.segmented button {
+  min-height: 36px;
+  padding: 0 var(--s-4);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: var(--tr-micro);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  transition: background-color 0.35s var(--ease-deso), color 0.35s var(--ease-deso);
+}
+
+.segmented button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--cr-50);
+}
+
+/* ==========================================================================
+   About page
+   ========================================================================== */
+
+.bio {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(var(--s-8), 6vw, var(--s-24));
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .bio {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bio__portrait {
+  position: sticky;
+  top: calc(var(--header-h) + var(--s-6));
+  display: grid;
+  gap: var(--s-4);
+}
+
+.bio__portrait .frame {
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius);
+}
+
+@media (max-width: 900px) {
+  .bio__portrait {
+    position: static;
+  }
+}
+
+.bio__body {
+  display: grid;
+  gap: var(--s-12);
+}
+
+.bio__section {
+  display: grid;
+  gap: var(--s-4);
+}
+
+.bio__q {
+  font-family: var(--font-display);
+  font-size: var(--t-d3);
+  line-height: 1.14;
+  letter-spacing: var(--tr-display);
+  text-wrap: balance;
+}
+
+/* Gear / spec list */
+.speclist {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.speclist div {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: var(--s-4);
+  padding-block: var(--s-3);
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+}
+
+@media (max-width: 560px) {
+  .speclist div {
+    grid-template-columns: 1fr;
+    gap: var(--s-1);
+  }
+}
+
+.speclist dt {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tr-micro);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.speclist dd {
+  font-size: var(--t-small);
+}
+
+/* ==========================================================================
+   Course plan page — the syllabus table
+   ========================================================================== */
+
+.syllabus {
+  border-top: 1px solid var(--rule-strong);
+}
+
+.syllabus__row {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) 9rem 7rem;
+  gap: var(--s-4);
+  align-items: baseline;
+  padding-block: var(--s-4);
+  border-bottom: 1px solid var(--rule);
+  transition: background-color 0.4s var(--ease-deso),
+    padding-inline 0.4s var(--ease-deso);
+}
+
+.syllabus__row:hover {
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  padding-inline: var(--s-3);
+}
+
+.syllabus__row--head {
+  border-bottom-color: var(--rule-strong);
+  padding-bottom: var(--s-3);
+}
+
+.syllabus__row--head:hover {
+  background: none;
+  padding-inline: 0;
+}
+
+.syllabus__wk {
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.syllabus__concept {
+  font-family: var(--font-read);
+  font-size: var(--t-body);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.syllabus__date,
+.syllabus__type {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+@media (max-width: 760px) {
+  .syllabus__row {
+    grid-template-columns: 3rem minmax(0, 1fr);
+    row-gap: var(--s-2);
+  }
+  .syllabus__date {
+    grid-column: 2;
+  }
+  .syllabus__type {
+    grid-column: 2;
+  }
+  .syllabus__row--head {
+    display: none;
+  }
+}
+
+/* Rubric / criteria cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: var(--s-6);
+}
+
+.card {
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+  padding: var(--s-6);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--bg-raised) 55%, transparent);
+  transition: border-color 0.45s var(--ease-deso), transform 0.45s var(--ease-deso);
+}
+
+.card:hover {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  transform: translateY(-3px);
+}
+
+.card__title {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  line-height: 1.2;
+}
+
+.card p {
+  font-size: var(--t-small);
+  color: var(--fg-muted);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   404
+   ========================================================================== */
+
+.lost {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: var(--gutter);
+}
+
+.lost__inner {
+  display: grid;
+  gap: var(--s-6);
+  justify-items: center;
+  max-width: 34rem;
+}
