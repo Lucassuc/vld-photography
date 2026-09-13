@@ -151,6 +151,8 @@
       const plain = text.replace(/[*_>#[\]()]/g, "");
       const excerpt = text
         ? `${esc(plain.slice(0, 200))}${plain.length > 200 ? "…" : ""}`
+        : w.isPlanning
+        ? esc(w.description)
         : w.status === "upcoming"
         ? "Upcoming session."
         : "Reflection not yet written.";
@@ -190,7 +192,9 @@
               <span class="door__date">${esc(w.dateLabel)}</span>
             </span>
             <span class="door__thumb">${thumb}</span>
-            <span class="door__status">${here && !w.written ? "This week" : STATUS[w.status]}</span>
+            <span class="door__status">${
+              w.isPlanning ? "Ungraded" : here && !w.written ? "This week" : STATUS[w.status]
+            }</span>
             ${svg(ARROW_R, "door__arrow")}
           </a>
         </li>`;
@@ -228,9 +232,9 @@
       </header>`;
 
     if (w.isPlanning) {
-      const empty = w.status === "upcoming" ? "Upcoming session." : "Not yet written.";
+      // The planning week needs no write-up; show a note only if one exists.
       return `<article class="entry entry--room entry--planning">${head}
-        <p class="entry__line${w.note ? "" : " is-empty"}" id="room-note">${esc(w.note || empty)}</p>
+        <p class="entry__line" id="room-note"${w.note ? "" : " hidden"}>${esc(w.note)}</p>
       </article>`;
     }
 

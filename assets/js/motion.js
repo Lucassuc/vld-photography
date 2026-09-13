@@ -348,10 +348,9 @@
         io.observe(strip);
       }
 
-      const narrow = () =>
-        window.innerWidth <= 800 || reduced.matches;
-
-      if (narrow()) {
+      // Same pinned sideways travel on phones as on desktop; only visitors who
+      // ask for reduced motion get a plain swipeable row instead.
+      if (reduced.matches) {
         track.setAttribute("data-native-scroll", "");
         return;
       }

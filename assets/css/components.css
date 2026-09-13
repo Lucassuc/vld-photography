@@ -304,7 +304,15 @@
 
 @media (max-width: 700px) {
   .chapter {
-    display: none;
+    top: calc(var(--header-h) + var(--s-3));
+    bottom: auto;
+    padding: var(--s-2) var(--s-3);
+  }
+  .chapter__text {
+    min-width: 0;
+  }
+  .chapter__name {
+    font-size: 0.75rem;
   }
 }
 

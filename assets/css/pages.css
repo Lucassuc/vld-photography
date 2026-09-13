@@ -337,8 +337,17 @@
   border-radius: var(--radius);
 }
 
-/* On narrow screens the pin is replaced by an honest native swipe */
-@media (max-width: 800px), (prefers-reduced-motion: reduce) {
+@media (max-width: 800px) {
+  .strip__pin {
+    gap: var(--s-6);
+  }
+  .strip__item {
+    width: min(66vw, 17rem);
+  }
+}
+
+/* Reduced motion: the pin is replaced by a plain native swipe */
+@media (prefers-reduced-motion: reduce) {
   .strip {
     height: auto;
   }
