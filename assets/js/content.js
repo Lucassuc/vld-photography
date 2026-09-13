@@ -133,11 +133,13 @@ const VLD = (() => {
     }
   }
 
+  // Resolves to the image's natural size, or null if it can't be loaded.
   function probe(url) {
     return new Promise((resolve) => {
       const img = new Image();
-      img.onload = () => resolve(img.naturalWidth > 0);
-      img.onerror = () => resolve(false);
+      img.onload = () =>
+        resolve(img.naturalWidth > 0 ? { w: img.naturalWidth, h: img.naturalHeight } : null);
+      img.onerror = () => resolve(null);
       img.src = url;
     });
   }
@@ -145,13 +147,16 @@ const VLD = (() => {
   async function findImage(n, explicit) {
     const name = explicit && explicit.trim() ? explicit.trim() : `week-${pad(n)}.${CONFIG.imageExt}`;
     const path = name.includes("/") ? name : CONFIG.imageBase + name;
-    if (await probe(path)) return path;
+    const size = await probe(path);
+    if (size) return { src: path, ...size };
     const a = author();
     if (a) {
       const raw = a.rawUrl(path);
-      if (raw && (await probe(`${raw}?t=${Date.now()}`))) return `${raw}?t=${Date.now()}`;
+      const url = raw ? `${raw}?t=${Date.now()}` : "";
+      const rawSize = url ? await probe(url) : null;
+      if (rawSize) return { src: url, ...rawSize };
     }
-    return "";
+    return null;
   }
 
   /* ---------- plan ---------- */
@@ -183,7 +188,8 @@ const VLD = (() => {
     const written = isPlanning ? Boolean(note) : Boolean(reflection.trim());
     // Upcoming, unwritten weeks cannot have a photo yet — skip the request.
     const mayHavePhoto = !isPlanning && (Boolean(meta.image) || written || date <= now);
-    const image = mayHavePhoto ? await findImage(n, meta.image) : "";
+    const photo = mayHavePhoto ? await findImage(n, meta.image) : null;
+    const image = photo ? photo.src : "";
 
     return {
       week: n,
@@ -204,6 +210,8 @@ const VLD = (() => {
       reflection,
       html: markdown(reflection),
       image,
+      imageW: photo ? photo.w : 0,
+      imageH: photo ? photo.h : 0,
       hasImage: Boolean(image),
       hasReflection: Boolean(reflection.trim()),
       written,

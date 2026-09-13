@@ -78,9 +78,20 @@
         w.status === "upcoming" ? "Upcoming" : "No photo yet"
       }</span></div></div>`;
     }
-    return `<div class="frame ${cls}" data-cursor="${esc(opts.cursor || "View")}"><img src="${esc(w.image)}" alt="${esc(
-      `Week ${w.week} — ${w.concept}`
-    )}" loading="${opts.eager ? "eager" : "lazy"}" decoding="async"></div>`;
+    // The frame takes the photo's own shape, so portrait and landscape shots
+    // are shown whole instead of being cropped to a fixed box.
+    const size = w.imageW && w.imageH ? ` width="${w.imageW}" height="${w.imageH}"` : "";
+    return `<div class="frame frame--fit ${cls}" style="${fitStyle(w.imageW, w.imageH)}" data-cursor="${esc(
+      opts.cursor || "View"
+    )}"><img src="${esc(w.image)}" alt="${esc(`Week ${w.week} — ${w.concept}`)}"${size} loading="${
+      opts.eager ? "eager" : "lazy"
+    }" decoding="async"></div>`;
+  }
+
+  // --rn is width ÷ height; the CSS uses it to cap tall photos at screen height.
+  function fitStyle(width, height) {
+    if (!width || !height) return "";
+    return `aspect-ratio:${width} / ${height};--rn:${(width / height).toFixed(4)}`;
   }
 
   function statusTag(w) {
@@ -425,6 +436,8 @@
           const frameEl = $("#room-figure .frame");
           const upload = $(".upload", frameEl);
           frameEl.classList.remove("frame--empty");
+          frameEl.classList.add("frame--fit");
+          frameEl.setAttribute("style", fitStyle(photo.width, photo.height));
           $$(":scope > :not(.upload)", frameEl).forEach((el) => el.remove());
           frameEl.insertAdjacentHTML("afterbegin", `<img src="${photo.url}" alt="Week ${w.week} photo">`);
           $(".upload__cta .label", upload).textContent = "Replace photo";
@@ -453,6 +466,8 @@
       publishBtn.disabled = true;
       const imageName = photo ? `week-${w.num}.jpg` : w.hasImage ? w.image.split("/").pop().split("?")[0] : "";
       try {
+        const frameW = photo ? photo.width : w.imageW;
+        const frameH = photo ? photo.height : w.imageH;
         if (photo) {
           setStatus("Uploading photo…");
           await a.putFile(`${VLD.CONFIG.imageBase}week-${w.num}.jpg`, await a.blobToBase64(photo.blob), `Week ${w.week}: photo`);
@@ -460,6 +475,8 @@
           fileInput.value = "";
           w.hasImage = true;
           w.image = `${VLD.CONFIG.imageBase}${imageName}`;
+          w.imageW = frameW;
+          w.imageH = frameH;
         }
         setStatus("Saving…");
         const md = VLD.serialize({ ...w, note: d.note, settings: d.settings, reflection: d.reflection, image: imageName });
@@ -511,9 +528,10 @@
             <span class="label">${w.num}</span>
           </div>
           <span class="label">${esc(w.settings || w.dateShort)}</span>`;
+        const rn = w.hasImage && w.imageW && w.imageH ? (w.imageW / w.imageH).toFixed(4) : "1.5";
         return w.hasImage
-          ? `<button class="shot" type="button" data-shot="${shots.indexOf(w)}">${inner}</button>`
-          : `<a class="shot" href="${roomUrl(w.week)}">${inner}</a>`;
+          ? `<button class="shot" type="button" style="--rn:${rn}" data-shot="${shots.indexOf(w)}">${inner}</button>`
+          : `<a class="shot" style="--rn:${rn}" href="${roomUrl(w.week)}">${inner}</a>`;
       })
       .join("");
     refresh(sheet);

@@ -1724,3 +1724,128 @@ body.has-publishbar .site-footer {
     min-height: 44px;
   }
 }
+
+/* ==========================================================================
+   Photos keep their own shape
+   A fitted frame takes the photo's aspect ratio (set inline). Its width is
+   capped so a tall portrait never grows taller than the screen; it is then
+   centred instead of being cropped.
+   ========================================================================== */
+
+.frame--fit {
+  --fit-h: 82svh;
+  width: min(100%, calc(var(--fit-h) * var(--rn, 1.5)));
+  margin-inline: auto;
+  background: transparent;
+}
+
+.frame--fit > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* the frame already has the photo's exact ratio */
+}
+
+.entry__figure .frame--fit {
+  --fit-h: calc(100svh - var(--header-h) - 6rem);
+}
+
+.latest__frame.frame--fit {
+  --fit-h: 72svh;
+}
+
+/* The caption lines up with a narrower portrait frame. */
+.entry__figure:has(.frame--fit) .entry__caption {
+  justify-content: center;
+}
+
+/* ==========================================================================
+   Gallery — justified rows
+   Tiles share a row height; each tile's width grows in proportion to its
+   photo's width ÷ height (--rn), so portrait and landscape shots sit side by
+   side without cropping, in week order.
+   ========================================================================== */
+
+.sheet {
+  --row: 280px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--s-8) var(--s-4);
+}
+
+/* Keeps the last, partly filled row at natural size instead of stretching. */
+.sheet::after {
+  content: "";
+  flex-grow: 999999;
+}
+
+.sheet .shot {
+  flex: var(--rn, 1.5) 1 calc(var(--rn, 1.5) * var(--row));
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.sheet .shot__frame {
+  width: 100%;
+  aspect-ratio: var(--rn, 1.5);
+}
+
+.sheet .shot__frame.frame--fit {
+  --fit-h: 100vh;
+}
+
+.sheet .shot__meta {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .sheet {
+    --row: 200px;
+  }
+}
+
+@media (max-width: 560px) {
+  .sheet {
+    --row: 150px;
+    gap: var(--s-6) var(--s-3);
+  }
+  .sheet .shot__concept {
+    font-size: 1rem;
+  }
+}
+
+/* Lightbox: a percentage max-height doesn't resolve inside the auto-sized
+   grid row, so tall portraits overflowed the screen. Cap against the viewport. */
+.lightbox__img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100svh - 12rem);
+}
+
+/* Phones: one photo per row at its natural shape — rows of mixed shapes get
+   too narrow to read at this width. Empty weeks stay short so the page isn't
+   mostly placeholders. */
+@media (max-width: 560px) {
+  .sheet {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-8);
+  }
+  .sheet::after {
+    content: none;
+  }
+  .sheet .shot {
+    width: 100%;
+  }
+  .sheet .shot__frame {
+    aspect-ratio: var(--rn, 1.5);
+  }
+  .sheet .shot__frame.frame--empty {
+    aspect-ratio: 5 / 2;
+  }
+  .sheet .shot__concept {
+    font-size: 1.1875rem;
+  }
+}
